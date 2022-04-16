@@ -20,9 +20,7 @@ steps:
     TF_STATE_BLOB_CONTAINER_NAME: $(container-name)
     TF_STATE_BLOB_FILE:           $(TFstate-File-Name-Automating-Infrastructure-Deployments)
     TF_STATE_STORAGE_KEY:      $(euterraformstatefile-key-1)   
-- bash: terraform plan -out deployment.tfplan -var client_id=$ARM_CLIENT_ID \
-     -var client_secret="$ARM_CLIENT_SECRET" \
-     -var ssh_key="$SSH_KEY"
+- bash: terraform plan -out deployment.tfplan 
   displayName: Terraform Plan 
   env:
     ARM_SUBSCRIPTION_ID: $(kv-arm-subscription-id)
@@ -30,9 +28,9 @@ steps:
     ARM_CLIENT_SECRET:   $(kv-arm-client-secret)
     ARM_TENANT_ID:       $(kv-arm-tenant-id)
     SSH_KEY:             $(SSH)
-- bash: terraform apply -auto-approve deployment.tfplan -var client_id=$ARM_CLIENT_ID \
-     -var client_secret="$ARM_CLIENT_SECRET" \
-     -var ssh_key="$SSH_KEY"
+    client_id:           $(kv-arm-client-id)
+    client_secret:       $(kv-arm-client-secret)
+- bash: terraform apply -auto-approve deployment.tfplan 
   displayName: Terraform Apply
   env:
     ARM_SUBSCRIPTION_ID: $(kv-arm-subscription-id)
@@ -40,3 +38,5 @@ steps:
     ARM_CLIENT_SECRET:   $(kv-arm-client-secret)
     ARM_TENANT_ID:       $(kv-arm-tenant-id)
     SSH_KEY:             $(SSH)
+    client_id:           $(kv-arm-client-id)
+    client_secret:       $(kv-arm-client-secret)
