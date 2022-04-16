@@ -1,0 +1,178 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "vmName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Name",
+        "defaultValue": "Terraform",
+        "toolTip": "",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-z0-9A-Z]{1,54}$",
+          "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-54 characters long."
+        },
+        "visible": true
+      },
+      {
+        "name": "userName",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "User name",
+        "defaultValue": "",
+        "toolTip": "",
+        "constraints": {
+          "required": true
+        },
+        "osPlatform": "Linux",
+        "visible": true
+      },
+      {
+        "name": "authType",
+        "type": "Microsoft.Compute.CredentialsCombo",
+        "label": {
+          "authenticationType": "Authentication type",
+          "password": "Password",
+          "confirmPassword": "Confirm password",
+          "sshPublicKey": "SSH public key"
+        },
+        "toolTip": {
+          "authenticationType": "",
+          "password": "",
+          "sshPublicKey": ""
+        },
+        "constraints": {
+          "required": true,
+          "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@#\\$%\\^&\\*-_!+=\\[\\]\\{\\}\\|\\\\:',\\.\\?\\/`~\"\\(\\);]{8,}$",
+          "customValidationMessage": "The password must contain at least 8 characters, with at least 1 letter and 1 number. Alphanumerical (@#$%^&*-_!+=[]{}|\\:',.?/`~\"();)and special characters are allowed"
+        },
+        "options": {
+          "hideConfirmation": false,
+          "hidePassword": false
+        },
+        "osPlatform": "Linux",
+        "visible": true
+      }
+    ],
+    "steps": [
+      {
+        "name": "firstStep",
+        "label": "Additional Settings",
+        "bladeTitle": "Additional Settings",
+        "subLabel": {
+          "preValidation": "",
+          "postValidation": "Done"
+        },
+        "elements": [
+          {
+            "name": "vmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Size",
+            "toolTip": "",
+            "recommendedSizes": [
+              "Standard_DS2_v2",
+              "Standard_DS1_v2",
+              "Standard_DS11_v2"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_B1s",
+                "Standard_B1ms",
+                "Standard_B2s",
+                "Standard_B2ms",
+                "Standard_B4ms",
+                "Standard_B8ms",
+                "Standard_D2s_v3",
+                "Standard_D4s_v3",
+                "Standard_D8s_v3",
+                "Standard_D16s_v3",
+                "Standard_D32s_v3",
+                "Standard_D64s_v3",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_F2s_v2",
+                "Standard_F4s_v2",
+                "Standard_F8s_v2",
+                "Standard_F16s_v2",
+                "Standard_F32s_v2",
+                "Standard_F64s_v2",
+                "Standard_F72s_v2",
+                "Standard_F1s",
+                "Standard_F2s",
+                "Standard_F4s",
+                "Standard_F8s",
+                "Standard_F16s",
+                "Standard_E2s_v3",
+                "Standard_E4s_v3",
+                "Standard_E8s_v3",
+                "Standard_E16s_v3",
+                "Standard_E32s_v3",
+                "Standard_E64s_v3",
+                "Standard_M64s",
+                "Standard_M64ms",
+                "Standard_M128s",
+                "Standard_M128ms",
+                "Standard_GS1",
+                "Standard_GS2",
+                "Standard_GS3",
+                "Standard_GS4",
+                "Standard_GS5",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14"
+              ]
+            },
+            "osPlatform": "Linux",
+            "count": 1,
+            "visible": true
+          },
+          {
+            "name": "vmDiskType",
+            "type": "Microsoft.Common.OptionsGroup",
+            "label": "VM disk type",
+            "defaultValue": "SSD",
+            "toolTip": "Premium disks (SSD) are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "SSD",
+                  "value": "Premium_LRS"
+                },
+                {
+                  "label": "HDD",
+                  "value": "Standard_LRS"
+                }
+              ]
+            },
+            "visible": true
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "adminPassword": "[basics('authType').password]",
+      "adminSSHPublicKey": "[basics('authType').sshPublicKey]",
+      "adminUserName": "[basics('userName')]",
+      "authenticationType": "[basics('authType').authenticationType]",
+      "vmName": "[basics('vmName')]",
+      "vmSize": "[steps('firstStep').vmSize]",
+      "storageAccountType": "[steps('firstStep').vmDiskType]",
+      "location": "[location()]"
+    }
+  }
+}
