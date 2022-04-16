@@ -20,7 +20,7 @@ steps:
     TF_STATE_BLOB_CONTAINER_NAME: $(container-name)
     TF_STATE_BLOB_FILE:           $(TFstate-File-Name-Automating-Infrastructure-Deployments)
     TF_STATE_STORAGE_KEY:      $(euterraformstatefile-key-1)   
-- bash: terraform plan -out deployment.tfplan 
+- bash: terraform plan -out deployment.tfplan -var client_id=$ARM_CLIENT_ID     -var client_secret="$ARM_CLIENT_SECRET"     -var ssh_key="$SSH_KEY"
   displayName: Terraform Plan 
   env:
     ARM_SUBSCRIPTION_ID: $(kv-arm-subscription-id)
