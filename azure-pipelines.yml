@@ -4,7 +4,8 @@ trigger:
 
 variables:
 - group: Azure-Key-Vault
-  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/testing/samples/integration-testing/src'
+- name: terraformWorkingDirectory
+  value: '$(System.DefaultWorkingDirectory)/testing/samples/integration-testing/src'
 
 pool:
   vmImage: ubuntu-latest
