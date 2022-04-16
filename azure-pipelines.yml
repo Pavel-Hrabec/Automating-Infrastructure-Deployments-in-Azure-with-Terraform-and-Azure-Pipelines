@@ -1,13 +1,17 @@
 trigger:
 - main
 
+
 variables:
 - group: Azure-Key-Vault
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/testing/samples/integration-testing/src'
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
+- bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
+  displayName: Checkov Static Code Analysis
 - bash: |
     terraform init \
       -backend-config="storage_account_name=$TF_STATE_BLOB_ACCOUNT_NAME" \
